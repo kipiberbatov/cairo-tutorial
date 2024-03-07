@@ -1,3 +1,4 @@
+/* modification of https://zetcode.com/gfx/cairo/cairobackends/ */
 #include <cairo.h>
 #include <cairo-pdf.h>
 #include <stdio.h>
@@ -9,7 +10,7 @@ int main(int argc, char * argv[])
   
   if (argc != 3)
   {
-    fprintf(stderr, "Usage: %s <text> <output>.png\n", argv[0]);
+    fprintf(stderr, "Usage: %s <text> <output>.pdf\n", argv[0]);
     return 1;
   }
 

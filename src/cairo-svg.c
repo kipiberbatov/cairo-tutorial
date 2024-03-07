@@ -1,7 +1,8 @@
 /* modification of https://zetcode.com/gfx/cairo/cairobackends/ */
 #include <cairo.h>
+#include <cairo-svg.h>
 #include <stdio.h>
-
+ 
 int main(int argc, char * argv[])
 {
   cairo_surface_t *surface;
@@ -9,11 +10,11 @@ int main(int argc, char * argv[])
   
   if (argc != 3)
   {
-    fprintf(stderr, "Usage: %s <text> <output>.png\n", argv[0]);
+    fprintf(stderr, "Usage: %s <text> <output>.svg\n", argv[0]);
     return 1;
   }
 
-  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 390, 60);
+  surface = cairo_svg_surface_create(argv[2], 390, 60);
   cr = cairo_create(surface);
 
   cairo_set_source_rgb(cr, 0, 0, 0);
@@ -24,10 +25,8 @@ int main(int argc, char * argv[])
   cairo_move_to(cr, 10.0, 50.0);
   cairo_show_text(cr, argv[1]);
 
-  cairo_surface_write_to_png(surface, argv[2]);
-
-  cairo_destroy(cr);
   cairo_surface_destroy(surface);
+  cairo_destroy(cr);
 
   return 0;
 }
