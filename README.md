@@ -18,11 +18,12 @@ To run demos, type `make demo`.
 
 To clean object files, type `make clean`.
 
-To clean all build files but not the build directory and its subdirectories, type `make distclean`.
+To clean all build files but not the build directory and its subdirectories,
+type `make distclean`.
 
-To return to the original version of the repository, type `make uninitialize.
+To return to the original version of the repository, type `make uninitialize`.
 
-By default `make initialize` will create a __build__ directory called **build**.
+By default `make initialize` will create a build directory called **build**.
 If you want to call it differently, say **my-build**, then you type
 `make BUILD=my-build initialize`.
 In such a case you have to always type **BUILD=my-build** after **make**.
@@ -38,7 +39,7 @@ lawyers happy.
 
 ## What is it in this repository?
 
-At the moment, there sare simple examples of text rendering for:
+At the moment, there are simple examples of text rendering for:
 
 - GTK
 - PDF
