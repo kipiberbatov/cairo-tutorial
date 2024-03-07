@@ -1,64 +1,93 @@
 BUILD := build
+BIN :=
+OBJECT :=
+DEMO :=
 
-OBJECT := \
-  $(BUILD)/object/cairo-pdf.o \
-  $(BUILD)/object/cairo-png.o \
-  $(BUILD)/object/cairo-svg.o \
-
-BIN := \
-  $(BUILD)/bin/cairo-pdf \
-  $(BUILD)/bin/cairo-png \
-  $(BUILD)/bin/cairo-svg \
-
-DEMO := \
-  $(BUILD)/demo/image.pdf \
-  $(BUILD)/demo/image.png \
-  $(BUILD)/demo/image.svg
-
+################################### DEFAULT ####################################
 .PHONY: all
-all: setup $(BIN)
+all: link
 
-.PHONY: setup
-setup: 
+################################## INITIALIZE ##################################
+.PHONY: initialize
+initialize:
 	mkdir -p $(BUILD)
 	mkdir -p $(BUILD)/bin
 	mkdir -p $(BUILD)/object
-	
+	mkdir -p $(BUILD)/demo
 
+##################################### GTK ######################################
+$(BUILD)/bin/cairo-gtk: $(BUILD)/object/cairo-gtk.o
+	$(CC) -o $@ $(shell pkg-config --libs gtk+-3.0) $<
+
+BIN += $(BUILD)/bin/cairo-gtk
+
+$(BUILD)/object/cairo-gtk.o: src/cairo-gtk.c
+	$(CC) -o $@ $(shell pkg-config --cflags gtk+-3.0) -O2 -c $<
+
+OBJECT += $(BUILD)/object/cairo-gtk.o
+
+demo-gtk: $(BUILD)/bin/cairo-gtk
+	$<
+
+##################################### PDF ######################################
 $(BUILD)/bin/cairo-pdf: $(BUILD)/object/cairo-pdf.o
 	$(CC) -o $@ $(shell pkg-config --libs cairo) $<
+
+BIN += $(BUILD)/bin/cairo-pdf
 
 $(BUILD)/object/cairo-pdf.o: src/cairo-pdf.c
 	$(CC) -o $@ $(shell pkg-config --cflags cairo) -O2 -c $<
 
-$(BUILD)/bin/cairo-png: $(BUILD)/object/cairo-png.o
-	$(CC) -o $@ $(shell pkg-config --libs cairo) $<
-
-$(BUILD)/object/cairo-png.o: src/cairo-png.c
-	$(CC) -o $@ $(shell pkg-config --cflags cairo) -O2 -c $<
-
-$(BUILD)/bin/cairo-svg: $(BUILD)/object/cairo-svg.o
-	$(CC) -o $@ $(shell pkg-config --libs cairo) $<
-
-$(BUILD)/object/cairo-svg.o: src/cairo-svg.c
-	$(CC) -o $@ $(shell pkg-config --cflags cairo) -O2 -c $<
-
-.PHONY: demo
-demo: demo-setup $(DEMO)
-
-.PHONY: demo-setup
-demo-setup:
-	mkdir -p $(BUILD)/demo
+OBJECT += $(BUILD)/object/cairo-pdf.o
 
 $(BUILD)/demo/image.pdf: $(BUILD)/bin/cairo-pdf
 	$< "Hello, cairo!" $@
 
+DEMO += $(BUILD)/demo/image.pdf
+
+##################################### PNG ######################################
+$(BUILD)/bin/cairo-png: $(BUILD)/object/cairo-png.o
+	$(CC) -o $@ $(shell pkg-config --libs cairo) $<
+
+BIN += $(BUILD)/bin/cairo-png
+
+$(BUILD)/object/cairo-png.o: src/cairo-png.c
+	$(CC) -o $@ $(shell pkg-config --cflags cairo) -O2 -c $<
+
+OBJECT += $(BUILD)/object/cairo-png.o
+
 $(BUILD)/demo/image.png: $(BUILD)/bin/cairo-png
 	$< "Hello, cairo!" $@
+
+DEMO += $(BUILD)/demo/image.png
+
+##################################### SVG ######################################
+$(BUILD)/bin/cairo-svg: $(BUILD)/object/cairo-svg.o
+	$(CC) -o $@ $(shell pkg-config --libs cairo) $<
+
+BIN += $(BUILD)/bin/cairo-svg
+
+$(BUILD)/object/cairo-svg.o: src/cairo-svg.c
+	$(CC) -o $@ $(shell pkg-config --cflags cairo) -O2 -c $<
+
+OBJECT += $(BUILD)/object/cairo-svg.o
 
 $(BUILD)/demo/image.svg: $(BUILD)/bin/cairo-svg
 	$< "Hello, cairo!" $@
 
+DEMO += $(BUILD)/demo/image.svg
+
+################################### BUILDING ###################################
+.PHONY: link
+link: $(BIN)
+
+.PHONY: compile
+compile: $(OBJECT)
+
+.PHONY: demo
+demo: $(DEMO) demo-gtk
+
+################################### CLEANING ###################################
 .PHONY: clean
 clean:
 	-$(RM) $(OBJECT)
@@ -67,6 +96,6 @@ clean:
 distclean: clean
 	-$(RM) $(BIN) $(DEMO)
 
-.PHONY: default-repo
-default-repo: distclean
+.PHONY: uninitialize
+uninitialize: distclean
 	-$(RM) -r $(BUILD)
