@@ -36,4 +36,4 @@ lawyers happy.
 
 ## What is it in this repository?
 
-At the moment, there sare simple examples of text rendering for PDF and PGN.
+At the moment, there sare simple examples of text rendering for PDF and PNG.
