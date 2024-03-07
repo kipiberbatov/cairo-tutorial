@@ -1,1 +1,5 @@
+# where default build artifacts go
 build/
+
+# Mac OS specific files
+*.DS_Store
