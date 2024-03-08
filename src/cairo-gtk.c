@@ -1,34 +1,30 @@
 /* modification of https://zetcode.com/gfx/cairo/cairobackends/ */
-#include <stdio.h>
-
 #include <cairo.h>
 #include <gtk/gtk.h>
 
-static void do_drawing(cairo_t *);
-
-static gboolean on_draw_event(GtkWidget *widget, cairo_t *cr, 
-    gpointer user_data)
-{      
-  do_drawing(cr);
-
-  return FALSE;
-}
-
-static void do_drawing(cairo_t *cr)
+static void do_drawing(cairo_t * cr)
 {
+  /* set up colors and fonts */
   cairo_set_source_rgb(cr, 0, 0, 0);
   cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
-      CAIRO_FONT_WEIGHT_NORMAL);
+                                     CAIRO_FONT_WEIGHT_NORMAL);
   cairo_set_font_size(cr, 40.0);
-
+  
+  /* actual drawing */
   cairo_move_to(cr, 10.0, 50.0);
   cairo_show_text(cr, "Hello, cairo!");    
 }
 
-int main(int argc, char *argv[])
+static int on_draw_event(GtkWidget * widget, cairo_t * cr, void * user_data)
+{      
+  do_drawing(cr);
+  return FALSE;
+}
+
+int main(int argc, char * argv[])
 {
-  GtkWidget *window;
-  GtkWidget *darea;
+  GtkWidget * window;
+  GtkWidget * darea;
 
   gtk_init(&argc, &argv);
 
@@ -37,10 +33,8 @@ int main(int argc, char *argv[])
   darea = gtk_drawing_area_new();
   gtk_container_add(GTK_CONTAINER(window), darea);
 
-  g_signal_connect(G_OBJECT(darea), "draw", 
-      G_CALLBACK(on_draw_event), NULL); 
-  g_signal_connect(window, "destroy",
-      G_CALLBACK(gtk_main_quit), NULL);
+  g_signal_connect(G_OBJECT(darea), "draw", G_CALLBACK(on_draw_event), NULL); 
+  g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
   gtk_window_set_default_size(GTK_WINDOW(window), 400, 90); 

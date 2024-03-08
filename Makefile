@@ -2,6 +2,7 @@ BUILD := build
 BIN :=
 OBJECT :=
 DEMO :=
+DEMO-GTK :=
 
 ################################### DEFAULT ####################################
 .PHONY: all
@@ -28,6 +29,23 @@ OBJECT += $(BUILD)/object/cairo-gtk.o
 
 demo-gtk: $(BUILD)/bin/cairo-gtk
 	$<
+
+DEMO-GTK += demo-gtk
+
+$(BUILD)/bin/cairo-gtk-shapes: $(BUILD)/object/cairo-gtk-shapes.o
+	$(CC) -o $@ $(shell pkg-config --libs gtk+-3.0) $<
+
+BIN += $(BUILD)/bin/cairo-gtk-shapes
+
+$(BUILD)/object/cairo-gtk-shapes.o: src/cairo-gtk-shapes.c
+	$(CC) -o $@ $(shell pkg-config --cflags gtk+-3.0) -O2 -c $<
+
+OBJECT += $(BUILD)/object/cairo-gtk-shapes.o
+
+demo-gtk-shapes: $(BUILD)/bin/cairo-gtk-shapes
+	$<
+
+DEMO-GTK += demo-gtk-shapes
 
 ##################################### PDF ######################################
 $(BUILD)/bin/cairo-pdf: $(BUILD)/object/cairo-pdf.o
@@ -85,7 +103,7 @@ link: $(BIN)
 compile: $(OBJECT)
 
 .PHONY: demo
-demo: $(DEMO) demo-gtk
+demo: $(DEMO) $(DEMO-GTK)
 
 ################################### CLEANING ###################################
 .PHONY: clean
