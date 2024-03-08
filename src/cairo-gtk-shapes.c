@@ -1,5 +1,7 @@
 /* modification of https://zetcode.com/gfx/cairo/shapesfills/ */
 
+#include <math.h>
+
 #include <cairo.h>
 #include <gtk/gtk.h>
 
@@ -23,22 +25,24 @@ static void decagon_star_draw(cairo_t * cr)
   for (i = 0; i < 10; i++)
     cairo_line_to(cr, points[i][0], points[i][1]);
   cairo_close_path(cr);
-  
-  // cairo_stroke(cr);
   cairo_stroke_preserve(cr);
   cairo_fill(cr);
 }
 
+/* translated the original with -200 to the x axis */
 static void triangle_draw(cairo_t * cr)
 {
-  cairo_move_to(cr, 240, 40);
-  cairo_line_to(cr, 240, 160);
-  cairo_line_to(cr, 350, 160);
+  cairo_move_to(cr, 40, 40);
+  cairo_line_to(cr, 40, 160);
+  cairo_line_to(cr, 150, 160);
   cairo_close_path(cr);
-
   cairo_stroke(cr);
-  // cairo_stroke_preserve(cr);
-  // cairo_fill(cr);
+}
+
+static void point_draw(cairo_t * cr)
+{
+  cairo_arc(cr, 100, 100, 5, 0, 2 * M_PI);
+  cairo_fill(cr);
 }
 
 static void triangle_curved_draw(cairo_t * cr)
@@ -47,22 +51,23 @@ static void triangle_curved_draw(cairo_t * cr)
   cairo_line_to(cr, 380, 160);
   cairo_line_to(cr, 450, 160);
   cairo_curve_to(cr, 440, 155, 380, 145, 380, 40);
-
   cairo_stroke(cr);
-  // cairo_stroke_preserve(cr);
-  // cairo_fill(cr);
 }
 
 static void do_drawing(cairo_t *cr)
 {
   cairo_set_line_width(cr, 1);
-  
   cairo_set_source_rgb(cr, 1, 1, 0); /* yellow */
   decagon_star_draw(cr);
-  
+
+  cairo_set_line_width(cr, 2);
   cairo_set_source_rgb(cr, 1, 0, 1); /* magenta */
   triangle_draw(cr);
   
+  cairo_set_source_rgb(cr, 0, 0, 0); /* black */
+  point_draw(cr);
+  
+  cairo_set_line_width(cr, 3);
   cairo_set_source_rgb(cr, 0, 1, 1); /* cyan */
   triangle_curved_draw(cr);
 }
