@@ -1,4 +1,5 @@
 /* modification of https://zetcode.com/gfx/cairo/shapesfills/ */
+
 #include <cairo.h>
 #include <gtk/gtk.h>
 
@@ -47,8 +48,9 @@ static void triangle_curved_draw(cairo_t * cr)
   cairo_line_to(cr, 450, 160);
   cairo_curve_to(cr, 440, 155, 380, 145, 380, 40);
 
-  cairo_stroke_preserve(cr);
-  cairo_fill(cr);
+  cairo_stroke(cr);
+  // cairo_stroke_preserve(cr);
+  // cairo_fill(cr);
 }
 
 static void do_drawing(cairo_t *cr)

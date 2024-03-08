@@ -9,7 +9,7 @@ _build_dir := build
 ################################## VARIABLES ###################################
 _bin :=
 _object :=
-_demo :=
+_demo_static :=
 _demo_gtk :=
 
 ################################### DEFAULT ####################################
@@ -23,6 +23,7 @@ initialize:
 	mkdir -p $(_build_dir)/bin
 	mkdir -p $(_build_dir)/object
 	mkdir -p $(_build_dir)/demo
+	mkdir -p $(_build_dir)/log
 
 ##################################### GTK ######################################
 $(_build_dir)/bin/cairo-gtk: $(_build_dir)/object/cairo-gtk.o
@@ -35,11 +36,14 @@ $(_build_dir)/object/cairo-gtk.o: src/cairo-gtk.c
 
 _object += $(_build_dir)/object/cairo-gtk.o
 
-.PHONY: demo-gtk
-demo-gtk: $(_build_dir)/bin/cairo-gtk
+$(_build_dir)/log/cairo-gtk.log: $(_build_dir)/bin/cairo-gtk
 	$<
+	printf "This file was created after running %s\n" \
+	  $(_build_dir)/bin/cairo-gtk > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
 
-_demo_gtk += demo-gtk
+_demo_gtk += $(_build_dir)/log/cairo-gtk.log
 
 
 $(_build_dir)/bin/cairo-gtk-shapes: $(_build_dir)/object/cairo-gtk-shapes.o
@@ -52,11 +56,14 @@ $(_build_dir)/object/cairo-gtk-shapes.o: src/cairo-gtk-shapes.c
 
 _object += $(_build_dir)/object/cairo-gtk-shapes.o
 
-.PHONY: demo-gtk-shapes
-demo-gtk-shapes: $(_build_dir)/bin/cairo-gtk-shapes
+$(_build_dir)/log/cairo-gtk-shapes.log: $(_build_dir)/bin/cairo-gtk-shapes
 	$<
+	printf "This file was created after running %s\n" \
+	  $(_build_dir)/bin/cairo-gtk-shapes > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
 
-_demo_gtk += demo-gtk-shapes
+_demo_gtk += $(_build_dir)/log/cairo-gtk-shapes.log
 
 
 $(_build_dir)/bin/cairo-gtk-click: $(_build_dir)/object/cairo-gtk-click.o
@@ -69,11 +76,14 @@ $(_build_dir)/object/cairo-gtk-click.o: src/cairo-gtk-click.c
 
 _object += $(_build_dir)/object/cairo-gtk-click.o
 
-.PHONY: demo-gtk-click
-demo-gtk-click: $(_build_dir)/bin/cairo-gtk-click
+$(_build_dir)/log/cairo-gtk-click.log: $(_build_dir)/bin/cairo-gtk-click
 	$<
+	printf "This file was created after running %s\n" \
+	  $(_build_dir)/bin/cairo-gtk-click > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
 
-_demo_gtk += demo-gtk-click
+_demo_gtk += $(_build_dir)/log/cairo-gtk-click.log
 
 ##################################### PDF ######################################
 $(_build_dir)/bin/cairo-pdf: $(_build_dir)/object/cairo-pdf.o
@@ -89,7 +99,7 @@ _object += $(_build_dir)/object/cairo-pdf.o
 $(_build_dir)/demo/image.pdf: $(_build_dir)/bin/cairo-pdf
 	$< "Hello, cairo!" $@
 
-_demo += $(_build_dir)/demo/image.pdf
+_demo_static += $(_build_dir)/demo/image.pdf
 
 ##################################### PNG ######################################
 $(_build_dir)/bin/cairo-png: $(_build_dir)/object/cairo-png.o
@@ -105,7 +115,7 @@ _object += $(_build_dir)/object/cairo-png.o
 $(_build_dir)/demo/image.png: $(_build_dir)/bin/cairo-png
 	$< "Hello, cairo!" $@
 
-_demo += $(_build_dir)/demo/image.png
+_demo_static += $(_build_dir)/demo/image.png
 
 ##################################### SVG ######################################
 $(_build_dir)/bin/cairo-svg: $(_build_dir)/object/cairo-svg.o
@@ -121,7 +131,7 @@ _object += $(_build_dir)/object/cairo-svg.o
 $(_build_dir)/demo/image.svg: $(_build_dir)/bin/cairo-svg
 	$< "Hello, cairo!" $@
 
-_demo += $(_build_dir)/demo/image.svg
+_demo_static += $(_build_dir)/demo/image.svg
 
 ################################### BUILDING ###################################
 .PHONY: link
@@ -130,8 +140,14 @@ link: $(_bin)
 .PHONY: compile
 compile: $(_object)
 
+.PHONY: demo-static
+demo-static: $(_demo_static)
+
+.PHONY: demo-gtk
+demo-gtk : $(_demo_gtk)
+
 .PHONY: demo
-demo: $(_demo) $(_demo_gtk)
+demo: demo-static demo-gtk
 
 ################################### CLEANING ###################################
 .PHONY: clean
@@ -140,7 +156,7 @@ clean:
 
 .PHONY: distclean
 distclean: clean
-	-$(RM) $(_bin) $(_demo)
+	-$(RM) $(_bin) $(_demo_static) $(_demo_gtk)
 
 .PHONY: uninitialize
 uninitialize: distclean

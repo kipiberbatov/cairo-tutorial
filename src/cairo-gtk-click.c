@@ -1,4 +1,5 @@
 /* modification of https://zetcode.com/gfx/cairo/basicdrawing/ */
+
 #include <cairo.h>
 #include <gtk/gtk.h>
 
