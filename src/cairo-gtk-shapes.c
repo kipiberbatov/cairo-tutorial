@@ -23,6 +23,7 @@ static void decagon_star_draw(cairo_t * cr)
     cairo_line_to(cr, points[i][0], points[i][1]);
   cairo_close_path(cr);
   
+  // cairo_stroke(cr);
   cairo_stroke_preserve(cr);
   cairo_fill(cr);
 }
@@ -34,8 +35,9 @@ static void triangle_draw(cairo_t * cr)
   cairo_line_to(cr, 350, 160);
   cairo_close_path(cr);
 
-  cairo_stroke_preserve(cr);
-  cairo_fill(cr);
+  cairo_stroke(cr);
+  // cairo_stroke_preserve(cr);
+  // cairo_fill(cr);
 }
 
 static void triangle_curved_draw(cairo_t * cr)
@@ -46,7 +48,7 @@ static void triangle_curved_draw(cairo_t * cr)
   cairo_curve_to(cr, 440, 155, 380, 145, 380, 40);
 
   cairo_stroke_preserve(cr);
-  cairo_fill(cr); 
+  cairo_fill(cr);
 }
 
 static void do_drawing(cairo_t *cr)
