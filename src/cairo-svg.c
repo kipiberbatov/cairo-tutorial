@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
 {
   if (argc != 3)
   {
-    fprintf(stderr, "Usage: %s <text> <output>.pdf\n", argv[0]);
+    fprintf(stderr, "Usage: %s <text> <output>.svg\n", argv[0]);
     return 1;
   }
   svg_draw_text(argv[1], argv[2]);
