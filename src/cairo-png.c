@@ -1,5 +1,12 @@
 /* modification of https://zetcode.com/gfx/cairo/cairobackends/ */
 
+/*
+Drawing a text on a SVG file.
+Work is done in-memory, i.e., on a surface.
+After the work is finished, the result is written to a file.
+The surface is then destoyed.
+*/
+
 #include <stdio.h>
 
 #include <cairo.h>

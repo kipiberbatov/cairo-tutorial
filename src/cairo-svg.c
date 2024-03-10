@@ -1,10 +1,5 @@
 /* modification of https://zetcode.com/gfx/cairo/cairobackends/ */
 
-#include <stdio.h>
-
-#include <cairo.h>
-#include <cairo-svg.h>
-
 /*
 Drawing a text on a SVG file.
 Work is done unlike in-memory writing for the PNG case.
@@ -12,6 +7,11 @@ After a SVG surface is created, a context for that surface is created.
 The context then knows about the source.
 Hence, the surface is immediately destroyed.
 */
+
+#include <stdio.h>
+
+#include <cairo.h>
+#include <cairo-svg.h>
 
 /* Actual drawing of a text on an SVG cairo context. */
 static void context_draw_text(cairo_t * cr, const char * text)
