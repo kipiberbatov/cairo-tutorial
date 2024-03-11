@@ -126,6 +126,26 @@ $(_build_dir)/object/cairo-gtk-moving-star.o: src/cairo-gtk-moving-star.c
 
 _object += $(_build_dir)/object/cairo-gtk-moving-star.o
 
+# cairo-gtk-moving-point
+$(_build_dir)/log/cairo-gtk-moving-point.log: $(_build_dir)/bin/cairo-gtk-moving-point
+	$<
+	printf "This file was created after running %s\n" \
+	  ../bin/cairo-gtk-moving-point > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
+
+_log += $(_build_dir)/log/cairo-gtk-moving-point.log
+
+$(_build_dir)/bin/cairo-gtk-moving-point: $(_build_dir)/object/cairo-gtk-moving-point.o
+	$(CC) -o $@ $(_gtk_libs) $<
+
+_bin += $(_build_dir)/bin/cairo-gtk-moving-point
+
+$(_build_dir)/object/cairo-gtk-moving-point.o: src/cairo-gtk-moving-point.c
+	$(CC) -o $@ $(_gtk_cflags) -O2 -c $<
+
+_object += $(_build_dir)/object/cairo-gtk-moving-point.o
+
 ##################################### PDF ######################################
 $(_build_dir)/demo/image.pdf: $(_build_dir)/bin/cairo-pdf
 	$< "Hello, cairo!" $@
