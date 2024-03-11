@@ -30,7 +30,7 @@ initialize:
 $(_build_dir)/log/cairo-gtk.log: $(_build_dir)/bin/cairo-gtk
 	$<
 	printf "This file was created after running %s\n" \
-	  $(_build_dir)/bin/cairo-gtk > $@
+	  ../bin/cairo-gtk > $@
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
@@ -50,7 +50,7 @@ _object += $(_build_dir)/object/cairo-gtk.o
 $(_build_dir)/log/cairo-gtk-shapes.log: $(_build_dir)/bin/cairo-gtk-shapes
 	$<
 	printf "This file was created after running %s\n" \
-	  $(_build_dir)/bin/cairo-gtk-shapes > $@
+	  ../bin/cairo-gtk-shapes > $@
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
@@ -70,7 +70,7 @@ _object += $(_build_dir)/object/cairo-gtk-shapes.o
 $(_build_dir)/log/cairo-gtk-click.log: $(_build_dir)/bin/cairo-gtk-click
 	$<
 	printf "This file was created after running %s\n" \
-	  $(_build_dir)/bin/cairo-gtk-click > $@
+	  ../bin/cairo-gtk-click > $@
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
@@ -90,7 +90,7 @@ _object += $(_build_dir)/object/cairo-gtk-click.o
 $(_build_dir)/log/cairo-gtk-donut.log: $(_build_dir)/bin/cairo-gtk-donut
 	$<
 	printf "This file was created after running %s\n" \
-	  $(_build_dir)/bin/cairo-gtk-donut > $@
+	  ../bin/cairo-gtk-donut > $@
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
@@ -110,7 +110,7 @@ _object += $(_build_dir)/object/cairo-gtk-donut.o
 $(_build_dir)/log/cairo-gtk-moving-star.log: $(_build_dir)/bin/cairo-gtk-moving-star
 	$<
 	printf "This file was created after running %s\n" \
-	  $(_build_dir)/bin/cairo-gtk-moving-star > $@
+	  ../bin/cairo-gtk-moving-star > $@
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
@@ -150,7 +150,7 @@ _object += $(_build_dir)/object/cairo-pdf.o
 # _demo_static += $(_build_dir)/demo/animation.pdf.mkv
 
 # $(_build_dir)/log/cairo-pdf-animation.log: $(_build_dir)/bin/cairo-pdf-animation
-# 	$< $(_build_dir)/demo/animation
+# 	$< ../demo/animation
 # 	printf "This file was created after running %s\n" \
 # 	  $(word 2, $^) > $@
 # 	printf "Creation time: " >> $@
@@ -200,7 +200,7 @@ _demo_static += $(_build_dir)/demo/image.png
 # $(_build_dir)/log/cairo-png-animation.log: $(_build_dir)/bin/cairo-png-animation
 # 	$< $(_build_dir)/demo/animation
 # 	printf "This file was created after running %s\n" \
-# 	  $(_build_dir)/bin/cairo-png-animation > $@
+# 	  ../bin/cairo-png-animation > $@
 # 	printf "Creation time: " >> $@
 # 	echo $(shell date -u) >> $@
 #
