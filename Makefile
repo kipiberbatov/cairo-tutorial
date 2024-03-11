@@ -10,7 +10,7 @@ _build_dir := build
 _bin :=
 _object :=
 _demo_static :=
-_demo_gtk :=
+_log :=
 
 ################################### DEFAULT ####################################
 .PHONY: all
@@ -43,7 +43,7 @@ $(_build_dir)/log/cairo-gtk.log: $(_build_dir)/bin/cairo-gtk
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
-_demo_gtk += $(_build_dir)/log/cairo-gtk.log
+_log += $(_build_dir)/log/cairo-gtk.log
 
 
 $(_build_dir)/bin/cairo-gtk-shapes: $(_build_dir)/object/cairo-gtk-shapes.o
@@ -63,7 +63,7 @@ $(_build_dir)/log/cairo-gtk-shapes.log: $(_build_dir)/bin/cairo-gtk-shapes
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
-_demo_gtk += $(_build_dir)/log/cairo-gtk-shapes.log
+_log += $(_build_dir)/log/cairo-gtk-shapes.log
 
 
 $(_build_dir)/bin/cairo-gtk-click: $(_build_dir)/object/cairo-gtk-click.o
@@ -83,9 +83,14 @@ $(_build_dir)/log/cairo-gtk-click.log: $(_build_dir)/bin/cairo-gtk-click
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
-_demo_gtk += $(_build_dir)/log/cairo-gtk-click.log
+_log += $(_build_dir)/log/cairo-gtk-click.log
 
 ##################################### PDF ######################################
+$(_build_dir)/demo/image.pdf: $(_build_dir)/bin/cairo-pdf
+	$< "Hello, cairo!" $@
+
+_demo_static += $(_build_dir)/demo/image.pdf
+
 $(_build_dir)/bin/cairo-pdf: $(_build_dir)/object/cairo-pdf.o
 	$(CC) -o $@ $(_cairo_libs) $<
 
@@ -96,10 +101,31 @@ $(_build_dir)/object/cairo-pdf.o: src/cairo-pdf.c
 
 _object += $(_build_dir)/object/cairo-pdf.o
 
-$(_build_dir)/demo/image.pdf: $(_build_dir)/bin/cairo-pdf
-	$< "Hello, cairo!" $@
+# animation
+# $(_build_dir)/demo/animation.pdf.mkv: \
+# 	     $(_build_dir)/log/cairo-pdf-animation.log
+# 	   ffmpeg -f image2 -i $(_build_dir)/demo/animation_%3d.pdf -vcodec copy $@
 
-_demo_static += $(_build_dir)/demo/image.pdf
+# _demo_static += $(_build_dir)/demo/animation.pdf.mkv
+
+$(_build_dir)/log/cairo-pdf-animation.log: $(_build_dir)/bin/cairo-pdf-animation
+	$< $(_build_dir)/demo/animation
+	printf "This file was created after running %s\n" \
+	  $(word 2, $^) > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
+
+_log += $(_build_dir)/log/cairo-pdf-animation.log
+
+$(_build_dir)/bin/cairo-pdf-animation: $(_build_dir)/object/cairo-pdf-animation.o
+	$(CC) -o $@ $(_cairo_libs) $<
+
+_bin += $(_build_dir)/bin/cairo-pdf-animation
+
+$(_build_dir)/object/cairo-pdf-animation.o: src/cairo-pdf-animation.c
+	$(CC) -o $@ $(_cairo_cflags) -O2 -c $<
+
+_object += $(_build_dir)/object/cairo-pdf-animation.o
 
 ##################################### PNG ######################################
 $(_build_dir)/bin/cairo-png: $(_build_dir)/object/cairo-png.o
@@ -117,6 +143,33 @@ $(_build_dir)/demo/image.png: $(_build_dir)/bin/cairo-png
 
 _demo_static += $(_build_dir)/demo/image.png
 
+
+# animation
+$(_build_dir)/demo/animation.gif: \
+	     $(_build_dir)/log/cairo-png-animation.log
+	   ffmpeg -i build/demo/animation_%3d.png $@
+
+_demo_static += $(_build_dir)/demo/animation.gif
+
+$(_build_dir)/log/cairo-png-animation.log: $(_build_dir)/bin/cairo-png-animation
+	$< $(_build_dir)/demo/animation
+	printf "This file was created after running %s\n" \
+	  $(_build_dir)/bin/cairo-png-animation > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
+
+_log += $(_build_dir)/log/cairo-png-animation.log
+
+$(_build_dir)/bin/cairo-png-animation: $(_build_dir)/object/cairo-png-animation.o
+	$(CC) -o $@ $(_cairo_libs) $<
+
+_bin += $(_build_dir)/bin/cairo-png-animation
+
+$(_build_dir)/object/cairo-png-animation.o: src/cairo-png-animation.c
+	$(CC) -o $@ $(_cairo_cflags) -O2 -c $<
+
+_object += $(_build_dir)/object/cairo-png-animation.o
+
 ##################################### SVG ######################################
 $(_build_dir)/bin/cairo-svg: $(_build_dir)/object/cairo-svg.o
 	$(CC) -o $@ $(_cairo_libs) $<
@@ -133,6 +186,32 @@ $(_build_dir)/demo/image.svg: $(_build_dir)/bin/cairo-svg
 
 _demo_static += $(_build_dir)/demo/image.svg
 
+# animation
+# $(_build_dir)/demo/animation.svg.mkv: \
+# 	     $(_build_dir)/log/cairo-svg-animation.log
+# 	   ffmpeg -f image2 -i $(_build_dir)/demo/animation_%3d.svg -vcodec copy $@
+#
+# _demo_static += $(_build_dir)/demo/animation.svg.mkv
+
+$(_build_dir)/log/cairo-svg-animation.log: $(_build_dir)/bin/cairo-svg-animation
+	$< $(_build_dir)/demo/animation
+	printf "This file was created after running %s\n" \
+	  $(word 2, $^) > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
+
+_log += $(_build_dir)/log/cairo-svg-animation.log
+
+$(_build_dir)/bin/cairo-svg-animation: $(_build_dir)/object/cairo-svg-animation.o
+	$(CC) -o $@ $(_cairo_libs) $<
+
+_bin += $(_build_dir)/bin/cairo-svg-animation
+
+$(_build_dir)/object/cairo-svg-animation.o: src/cairo-svg-animation.c
+	$(CC) -o $@ $(_cairo_cflags) -O2 -c $<
+
+_object += $(_build_dir)/object/cairo-svg-animation.o
+
 ################################### BUILDING ###################################
 .PHONY: link
 link: $(_bin)
@@ -143,11 +222,11 @@ compile: $(_object)
 .PHONY: demo-static
 demo-static: $(_demo_static)
 
-.PHONY: demo-gtk
-demo-gtk : $(_demo_gtk)
+.PHONY: log
+log : $(_log)
 
 .PHONY: demo
-demo: demo-static demo-gtk
+demo: demo-static log
 
 ################################### CLEANING ###################################
 .PHONY: clean
@@ -156,7 +235,7 @@ clean:
 
 .PHONY: distclean
 distclean: clean
-	-$(RM) $(_bin) $(_demo_static) $(_demo_gtk)
+	-$(RM) $(_bin) $(_demo_static) $(_log) $(_build_dir)/demo/animation*
 
 .PHONY: uninitialize
 uninitialize: distclean

@@ -1,7 +1,7 @@
 /* modification of https://zetcode.com/gfx/cairo/cairobackends/ */
 
 /*
-Drawing a text on a SVG file.
+Drawing a text on a PNG file.
 Work is done in-memory, i.e., on a surface.
 After the work is finished, the result is written to a file.
 The surface is then destoyed.
