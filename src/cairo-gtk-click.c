@@ -3,37 +3,34 @@
 #include <cairo.h>
 #include <gtk/gtk.h>
 
-static void do_drawing(cairo_t *);
-
 struct {
   int count;
   double coordx[100];
   double coordy[100];
 } glob;
 
-static int on_draw_event(GtkWidget * widget, cairo_t * cr, void * user_data)
+static void do_drawing(cairo_t * cr)
 {
-  do_drawing(cr);
-  return FALSE;
-}
-
-static void do_drawing(cairo_t *cr)
-{
+  int i, j;
+  
   cairo_set_source_rgb(cr, 0, 0, 0);
   cairo_set_line_width(cr, 0.5);
-
-  int i, j;
-  for (i = 0; i <= glob.count - 1; i++)
+  for (i = 0; i < glob.count; i++)
   {
-    for (j = 0; j <= glob.count - 1; j++)
+    for (j = i + 1; j < glob.count; j++)
     {
       cairo_move_to(cr, glob.coordx[i], glob.coordy[i]);
       cairo_line_to(cr, glob.coordx[j], glob.coordy[j]);
     }
   }
-
   glob.count = 0;
   cairo_stroke(cr);    
+}
+
+static int on_draw_event(GtkWidget * widget, cairo_t * cr, void * user_data)
+{
+  do_drawing(cr);
+  return FALSE;
 }
 
 static int clicked(GtkWidget * widget, GdkEventButton * event, void * user_data)

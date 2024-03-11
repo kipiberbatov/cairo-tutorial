@@ -26,6 +26,16 @@ initialize:
 	mkdir -p $(_build_dir)/log
 
 ##################################### GTK ######################################
+# cairo-gtk
+$(_build_dir)/log/cairo-gtk.log: $(_build_dir)/bin/cairo-gtk
+	$<
+	printf "This file was created after running %s\n" \
+	  $(_build_dir)/bin/cairo-gtk > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
+
+_log += $(_build_dir)/log/cairo-gtk.log
+
 $(_build_dir)/bin/cairo-gtk: $(_build_dir)/object/cairo-gtk.o
 	$(CC) -o $@ $(_gtk_libs) $<
 
@@ -36,15 +46,15 @@ $(_build_dir)/object/cairo-gtk.o: src/cairo-gtk.c
 
 _object += $(_build_dir)/object/cairo-gtk.o
 
-$(_build_dir)/log/cairo-gtk.log: $(_build_dir)/bin/cairo-gtk
+# cairo-gtk-shapes
+$(_build_dir)/log/cairo-gtk-shapes.log: $(_build_dir)/bin/cairo-gtk-shapes
 	$<
 	printf "This file was created after running %s\n" \
-	  $(_build_dir)/bin/cairo-gtk > $@
+	  $(_build_dir)/bin/cairo-gtk-shapes > $@
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
-_log += $(_build_dir)/log/cairo-gtk.log
-
+_log += $(_build_dir)/log/cairo-gtk-shapes.log
 
 $(_build_dir)/bin/cairo-gtk-shapes: $(_build_dir)/object/cairo-gtk-shapes.o
 	$(CC) -o $@ $(_gtk_libs) $<
@@ -56,15 +66,15 @@ $(_build_dir)/object/cairo-gtk-shapes.o: src/cairo-gtk-shapes.c
 
 _object += $(_build_dir)/object/cairo-gtk-shapes.o
 
-$(_build_dir)/log/cairo-gtk-shapes.log: $(_build_dir)/bin/cairo-gtk-shapes
+# cairo-gtk-click
+$(_build_dir)/log/cairo-gtk-click.log: $(_build_dir)/bin/cairo-gtk-click
 	$<
 	printf "This file was created after running %s\n" \
-	  $(_build_dir)/bin/cairo-gtk-shapes > $@
+	  $(_build_dir)/bin/cairo-gtk-click > $@
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
-_log += $(_build_dir)/log/cairo-gtk-shapes.log
-
+_log += $(_build_dir)/log/cairo-gtk-click.log
 
 $(_build_dir)/bin/cairo-gtk-click: $(_build_dir)/object/cairo-gtk-click.o
 	$(CC) -o $@ $(_gtk_libs) $<
@@ -76,14 +86,45 @@ $(_build_dir)/object/cairo-gtk-click.o: src/cairo-gtk-click.c
 
 _object += $(_build_dir)/object/cairo-gtk-click.o
 
-$(_build_dir)/log/cairo-gtk-click.log: $(_build_dir)/bin/cairo-gtk-click
+# cairo-gtk-donut
+$(_build_dir)/log/cairo-gtk-donut.log: $(_build_dir)/bin/cairo-gtk-donut
 	$<
 	printf "This file was created after running %s\n" \
-	  $(_build_dir)/bin/cairo-gtk-click > $@
+	  $(_build_dir)/bin/cairo-gtk-donut > $@
 	printf "Creation time: " >> $@
 	echo $(shell date -u) >> $@
 
-_log += $(_build_dir)/log/cairo-gtk-click.log
+_log += $(_build_dir)/log/cairo-gtk-donut.log
+
+$(_build_dir)/bin/cairo-gtk-donut: $(_build_dir)/object/cairo-gtk-donut.o
+	$(CC) -o $@ $(_gtk_libs) $<
+
+_bin += $(_build_dir)/bin/cairo-gtk-donut
+
+$(_build_dir)/object/cairo-gtk-donut.o: src/cairo-gtk-donut.c
+	$(CC) -o $@ $(_gtk_cflags) -O2 -c $<
+
+_object += $(_build_dir)/object/cairo-gtk-donut.o
+
+# cairo-gtk-moving-star
+$(_build_dir)/log/cairo-gtk-moving-star.log: $(_build_dir)/bin/cairo-gtk-moving-star
+	$<
+	printf "This file was created after running %s\n" \
+	  $(_build_dir)/bin/cairo-gtk-moving-star > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
+
+_log += $(_build_dir)/log/cairo-gtk-moving-star.log
+
+$(_build_dir)/bin/cairo-gtk-moving-star: $(_build_dir)/object/cairo-gtk-moving-star.o
+	$(CC) -o $@ $(_gtk_libs) $<
+
+_bin += $(_build_dir)/bin/cairo-gtk-moving-star
+
+$(_build_dir)/object/cairo-gtk-moving-star.o: src/cairo-gtk-moving-star.c
+	$(CC) -o $@ $(_gtk_cflags) -O2 -c $<
+
+_object += $(_build_dir)/object/cairo-gtk-moving-star.o
 
 ##################################### PDF ######################################
 $(_build_dir)/demo/image.pdf: $(_build_dir)/bin/cairo-pdf

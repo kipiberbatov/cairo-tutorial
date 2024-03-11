@@ -9,19 +9,19 @@ static void decagon_star_draw(cairo_t * cr)
 {
   int i;
   const int points[10][2] =
-  { 
-    { 0, 85 }, 
-    { 75, 75 }, 
-    { 100, 10 }, 
-    { 125, 75 }, 
+  {
+    { 0, 85 },
+    { 75, 75 },
+    { 100, 10 },
+    { 125, 75 },
     { 200, 85 },
-    { 150, 125 }, 
+    { 150, 125 },
     { 160, 190 },
-    { 100, 150 }, 
+    { 100, 150 },
     { 40, 190 },
     { 50, 125 }
   };
-  
+
   for (i = 0; i < 10; i++)
     cairo_line_to(cr, points[i][0], points[i][1]);
   cairo_close_path(cr);
@@ -63,10 +63,10 @@ static void do_drawing(cairo_t *cr)
   cairo_set_line_width(cr, 2);
   cairo_set_source_rgb(cr, 1, 0, 1); /* magenta */
   triangle_draw(cr);
-  
+
   cairo_set_source_rgb(cr, 0, 0, 0); /* black */
   point_draw(cr);
-  
+
   cairo_set_line_width(cr, 3);
   cairo_set_source_rgb(cr, 0, 1, 1); /* cyan */
   triangle_curved_draw(cr);
@@ -90,11 +90,11 @@ int main(int argc, char * argv[])
   darea = gtk_drawing_area_new();
   gtk_container_add(GTK_CONTAINER(window), darea);
 
-  g_signal_connect(G_OBJECT(darea), "draw", G_CALLBACK(on_draw_event), NULL);  
+  g_signal_connect(G_OBJECT(darea), "draw", G_CALLBACK(on_draw_event), NULL);
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
-  gtk_window_set_default_size(GTK_WINDOW(window), 460, 240); 
+  gtk_window_set_default_size(GTK_WINDOW(window), 460, 240);
   gtk_window_set_title(GTK_WINDOW(window), "Other shapes");
 
   gtk_widget_show_all(window);
