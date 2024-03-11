@@ -19,7 +19,7 @@ static void point_draw(cairo_t * cr, double x, double y, double r)
 static void context_draw_circle(cairo_t * cr, int i)
 {
   double x, y;
-  
+
   cairo_save(cr);
   cairo_set_source_rgb(cr, 1, 1, 1);
   cairo_paint(cr);
@@ -35,7 +35,7 @@ static cairo_t * svg_context_create(const char * filename)
 {
   cairo_surface_t * surface;
   cairo_t * cr;
-  
+
   surface = cairo_svg_surface_create(filename, 100, 100);
   cr = cairo_create(surface);
   cairo_surface_destroy(surface);
@@ -45,35 +45,16 @@ static cairo_t * svg_context_create(const char * filename)
 static void svg_draw_circle(int i, const char * filename)
 {
   cairo_t * cr;
-  
+
   cr = svg_context_create(filename);
   context_draw_circle(cr, i);
   cairo_destroy(cr);
 }
 
-// static void surface_draw_circle(cairo_surface_t * surface, int i)
-// {
-//   cairo_t * cr;
-//
-//   cr = cairo_create(surface);
-//   context_draw_circle(cr, i);
-//   cairo_destroy(cr);
-// }
-//
-// static void svg_draw_circle(int i, const char * filename)
-// {
-//   cairo_surface_t * surface;
-//
-//   surface = cairo_svg_surface_create(CAIRO_FORMAT_ARGB32, 100, 100);
-//   surface_draw_circle(surface, i);
-//   cairo_surface_write_to_png(surface, filename);
-//   cairo_surface_destroy(surface);
-// }
-
 static void name_reset(char * name)
 {
   int n;
-  
+
   n = strlen(name);
   name[n - 8] = 0;
 }
@@ -89,13 +70,13 @@ int main(int argc, char * argv[])
 {
   int i;
   char name[256] = {0};
-  
+
   if (argc != 2)
   {
     fprintf(stderr, "Usage: %s <animation>\n", argv[0]);
     return 1;
   }
-  
+
   strcat(name, argv[1]);
   for (i = 0; i < 360; ++i)
   {

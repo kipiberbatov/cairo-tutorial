@@ -108,14 +108,19 @@ _object += $(_build_dir)/object/cairo-pdf.o
 
 # _demo_static += $(_build_dir)/demo/animation.pdf.mkv
 
-$(_build_dir)/log/cairo-pdf-animation.log: $(_build_dir)/bin/cairo-pdf-animation
-	$< $(_build_dir)/demo/animation
-	printf "This file was created after running %s\n" \
-	  $(word 2, $^) > $@
-	printf "Creation time: " >> $@
-	echo $(shell date -u) >> $@
+# $(_build_dir)/log/cairo-pdf-animation.log: $(_build_dir)/bin/cairo-pdf-animation
+# 	$< $(_build_dir)/demo/animation
+# 	printf "This file was created after running %s\n" \
+# 	  $(word 2, $^) > $@
+# 	printf "Creation time: " >> $@
+# 	echo $(shell date -u) >> $@
+#
+# _log += $(_build_dir)/log/cairo-pdf-animation.log
 
-_log += $(_build_dir)/log/cairo-pdf-animation.log
+$(_build_dir)/demo/animation.pdf: $(_build_dir)/bin/cairo-pdf-animation
+	$< $@
+
+_demo_static += $(_build_dir)/demo/animation.pdf
 
 $(_build_dir)/bin/cairo-pdf-animation: $(_build_dir)/object/cairo-pdf-animation.o
 	$(CC) -o $@ $(_cairo_libs) $<
@@ -145,20 +150,20 @@ _demo_static += $(_build_dir)/demo/image.png
 
 
 # animation
-$(_build_dir)/demo/animation.gif: \
-	     $(_build_dir)/log/cairo-png-animation.log
-	   ffmpeg -i build/demo/animation_%3d.png $@
-
-_demo_static += $(_build_dir)/demo/animation.gif
-
-$(_build_dir)/log/cairo-png-animation.log: $(_build_dir)/bin/cairo-png-animation
-	$< $(_build_dir)/demo/animation
-	printf "This file was created after running %s\n" \
-	  $(_build_dir)/bin/cairo-png-animation > $@
-	printf "Creation time: " >> $@
-	echo $(shell date -u) >> $@
-
-_log += $(_build_dir)/log/cairo-png-animation.log
+# $(_build_dir)/demo/animation.gif: \
+# 	     $(_build_dir)/log/cairo-png-animation.log
+# 	   ffmpeg -i build/demo/animation_%3d.png $@
+#
+# _demo_static += $(_build_dir)/demo/animation.gif
+#
+# $(_build_dir)/log/cairo-png-animation.log: $(_build_dir)/bin/cairo-png-animation
+# 	$< $(_build_dir)/demo/animation
+# 	printf "This file was created after running %s\n" \
+# 	  $(_build_dir)/bin/cairo-png-animation > $@
+# 	printf "Creation time: " >> $@
+# 	echo $(shell date -u) >> $@
+#
+# _log += $(_build_dir)/log/cairo-png-animation.log
 
 $(_build_dir)/bin/cairo-png-animation: $(_build_dir)/object/cairo-png-animation.o
 	$(CC) -o $@ $(_cairo_libs) $<
@@ -193,14 +198,19 @@ _demo_static += $(_build_dir)/demo/image.svg
 #
 # _demo_static += $(_build_dir)/demo/animation.svg.mkv
 
-$(_build_dir)/log/cairo-svg-animation.log: $(_build_dir)/bin/cairo-svg-animation
-	$< $(_build_dir)/demo/animation
-	printf "This file was created after running %s\n" \
-	  $(word 2, $^) > $@
-	printf "Creation time: " >> $@
-	echo $(shell date -u) >> $@
+# $(_build_dir)/log/cairo-svg-animation.log: $(_build_dir)/bin/cairo-svg-animation
+# 	$< $(_build_dir)/demo/animation
+# 	printf "This file was created after running %s\n" \
+# 	  $(word 2, $^) > $@
+# 	printf "Creation time: " >> $@
+# 	echo $(shell date -u) >> $@
+#
+# _log += $(_build_dir)/log/cairo-svg-animation.log
 
-_log += $(_build_dir)/log/cairo-svg-animation.log
+# $(_build_dir)/demo/animation.svg: $(_build_dir)/bin/cairo-svg-animation
+# 	$< $@
+#
+# _demo_static += $(_build_dir)/demo/animation.svg
 
 $(_build_dir)/bin/cairo-svg-animation: $(_build_dir)/object/cairo-svg-animation.o
 	$(CC) -o $@ $(_cairo_libs) $<
