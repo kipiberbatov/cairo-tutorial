@@ -76,16 +76,17 @@ int main(int argc, char * argv[])
 {
   star_metadata sm = {.angle = 0., .scale = 1., .delta = 0.01};
   GtkWidget * window;
-  GtkWidget * darea;
+  GtkWidget * drawing_area;
 
   gtk_init(&argc, &argv);
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   
-  darea = gtk_drawing_area_new();
-  gtk_container_add(GTK_CONTAINER (window), darea);  
+  drawing_area = gtk_drawing_area_new();
+  gtk_container_add(GTK_CONTAINER (window), drawing_area);  
 
-  g_signal_connect(G_OBJECT(darea), "draw", G_CALLBACK(on_draw_event), &sm); 
+  g_signal_connect(G_OBJECT(drawing_area), "draw",
+                   G_CALLBACK(on_draw_event), &sm); 
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
  
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
