@@ -9,17 +9,16 @@
 #include <cairo.h>
 #include <cairo-pdf.h>
 
-/* internal headers */
-#include "context_draw_circle.h"
+#include "context_fill.h"
 
-/* Actual drawing of a circle on an in-memory cairo context. */
+/* Actual drawing of a text on an in-memory cairo context. */
 static void pdf_draw_circle(cairo_t * cr, int width, int height, int i, int n)
 {
   cairo_save(cr);
   cairo_set_source_rgb(cr, 1, 1, 1);
   cairo_paint(cr);
   cairo_restore(cr);
-  context_draw_circle(cr, width, height, i, n);
+  context_fill(cr, width, height, i, n);
   cairo_show_page(cr);
 }
 
@@ -52,9 +51,9 @@ pdf_draw_circles(const char * filename, double width, double height, int n)
 
 int main(int argc, char * argv[])
 {
-  double width = 200;
-  double height = 200;
-  int n = 360;
+  double width = 595.;
+  double height = 842.;
+  int n = 100;
   
   if (argc != 2)
   {

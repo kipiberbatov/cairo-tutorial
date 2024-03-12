@@ -1,9 +1,7 @@
-#include <math.h>
-
 #include <cairo.h>
 #include <gtk/gtk.h>
 
-#include "context_draw_circle.h"
+#include "context_fill.h"
 
 static void do_drawing(GtkWidget * widget, cairo_t * cr, int * i, int n)
 {
@@ -12,8 +10,8 @@ static void do_drawing(GtkWidget * widget, cairo_t * cr, int * i, int n)
   
   win = gtk_widget_get_toplevel(widget);
   gtk_window_get_size(GTK_WINDOW(win), &width, &height);
-  context_draw_circle(cr, width, height, *i, n);
-  if (*i < n)
+  context_fill(cr, width, height, *i, n);
+  if (*i < n - 1)
     *i += 1;
 }
 
@@ -21,11 +19,11 @@ typedef struct
 {
   int i;
   int n;
-} arc;
+} color;
 
 static int on_draw_event(GtkWidget * widget, cairo_t * cr, void * user_data)
 {
-  arc * a = (arc *) user_data;
+  color * a = (color *) user_data;
   
   do_drawing(widget, cr, &(a->i), a->n);
   return FALSE;
@@ -39,7 +37,7 @@ static int time_handler(GtkWidget * widget)
 
 int main(int argc, char * argv[])
 {
-  arc a = {.i = 0, .n = 360};
+  color a = {.i = 0, .n = 100};
   GtkWidget * window;
   GtkWidget * drawing_area;
 
@@ -56,9 +54,9 @@ int main(int argc, char * argv[])
  
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
   gtk_window_set_default_size(GTK_WINDOW(window), 500, 500);
-  gtk_window_set_title(GTK_WINDOW(window), "Point moving in a circle");
+  gtk_window_set_title(GTK_WINDOW(window), "Changing colors");
 
-  g_timeout_add(10, (GSourceFunc) time_handler, (void *) window);
+  g_timeout_add(50, (GSourceFunc) time_handler, (void *) window);
 
   gtk_widget_show_all(window);
 

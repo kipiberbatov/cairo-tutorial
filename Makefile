@@ -25,12 +25,24 @@ initialize:
 	mkdir -p $(_build_dir)/demo
 	mkdir -p $(_build_dir)/log
 
+##################################### RGB ######################################
+$(_build_dir)/object/rgb.o: src/rgb.c include/rgb.h
+	$(CC) -o $@ -iquote include -O2 -c $<
+
+_object += $(_build_dir)/object/rgb.o
+
 ################################### CONTEXT ####################################
 $(_build_dir)/object/context_draw_circle.o: src/context_draw_circle.c \
 	  include/context_draw_circle.h
 	$(CC) -o $@ $(_cairo_cflags) -iquote include -O2 -c $<
 
 _object += $(_build_dir)/object/context_draw_circle.o
+
+$(_build_dir)/object/context_fill.o: src/context_fill.c \
+	  include/context_fill.h
+	$(CC) -o $@ $(_cairo_cflags) -iquote include -O2 -c $<
+
+_object += $(_build_dir)/object/context_fill.o
 
 ##################################### GTK ######################################
 # cairo-gtk
@@ -112,6 +124,30 @@ $(_build_dir)/object/cairo-gtk-donut.o: src/cairo-gtk-donut.c
 	$(CC) -o $@ $(_gtk_cflags) -O2 -c $<
 
 _object += $(_build_dir)/object/cairo-gtk-donut.o
+
+# cairo-gtk-fill
+$(_build_dir)/log/cairo-gtk-fill.log: $(_build_dir)/bin/cairo-gtk-fill
+	$<
+	printf "This file was created after running %s\n" \
+	  ../bin/cairo-gtk-fill > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
+
+_log += $(_build_dir)/log/cairo-gtk-fill.log
+
+$(_build_dir)/bin/cairo-gtk-fill: \
+	  $(_build_dir)/object/cairo-gtk-fill.o \
+	  $(_build_dir)/object/context_fill.o \
+	  $(_build_dir)/object/rgb.o
+	$(CC) -o $@ $(_gtk_libs) $^
+
+_bin += $(_build_dir)/bin/cairo-gtk-fill
+
+$(_build_dir)/object/cairo-gtk-fill.o: src/cairo-gtk-fill.c \
+	  include/context_fill.h include/rgb.h
+	$(CC) -o $@ $(_gtk_cflags) -iquote include -O2 -c $<
+
+_object += $(_build_dir)/object/cairo-gtk-fill.o
 
 # cairo-gtk-moving-star
 $(_build_dir)/log/cairo-gtk-moving-star.log: $(_build_dir)/bin/cairo-gtk-moving-star
@@ -225,6 +261,26 @@ $(_build_dir)/object/cairo-pdf-animation.o: src/cairo-pdf-animation.c \
 	$(CC) -o $@ $(_cairo_cflags) -iquote include -O2 -c $<
 
 _object += $(_build_dir)/object/cairo-pdf-animation.o
+
+# cairo-pdf-fill
+$(_build_dir)/demo/fill.pdf: $(_build_dir)/bin/cairo-pdf-fill
+	$< $@
+
+_demo_static += $(_build_dir)/demo/fill.pdf
+
+$(_build_dir)/bin/cairo-pdf-fill: \
+	   $(_build_dir)/object/cairo-pdf-fill.o \
+	   $(_build_dir)/object/context_fill.o \
+	   $(_build_dir)/object/rgb.o
+	$(CC) -o $@ $(_cairo_libs) $^
+
+_bin += $(_build_dir)/bin/cairo-pdf-fill
+
+$(_build_dir)/object/cairo-pdf-fill.o: src/cairo-pdf-fill.c \
+	  include/context_fill.h include/rgb.h
+	$(CC) -o $@ $(_cairo_cflags) -iquote include -O2 -c $<
+
+_object += $(_build_dir)/object/cairo-pdf-fill.o
 
 ##################################### PNG ######################################
 $(_build_dir)/bin/cairo-png: $(_build_dir)/object/cairo-png.o
