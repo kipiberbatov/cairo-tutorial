@@ -1,6 +1,6 @@
 # cairo-tutorial
 
-Tutorial in C using the cairo graphics library
+Tutorial in C using the Cairo graphics library
 [https://www.cairographics.org](https://www.cairographics.org)
 
 Tthis tutorial is for Unix-like platforms.
@@ -63,7 +63,8 @@ However, unlike the Unlicense, it has a copyright statement.
 
 ## What is it in this repository?
 
-Various vector graphics examples targeting the following backends:
+This repository contains various vector graphics examples
+targeting the following backends:
 
 - GTK
 - PDF
@@ -74,4 +75,4 @@ Animations are done via multi-page PDFs (one frame per page) or via GTK.
 Unfortunately, to my knowledge, Cairo is unable to render SVG animations.
 It is possible to do PNG images and to combine them with ffmpeg.
 However, this project is about vector graphics.
-Hence, I decided that there is no point of making GIFs aor MP4 movies.
+Hence, I decided that there is no point of making GIFs or MP4 movies.
