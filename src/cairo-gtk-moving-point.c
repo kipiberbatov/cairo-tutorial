@@ -22,8 +22,6 @@ static void context_draw_circle(cairo_t * cr, int width, int height, int i)
 
 static void context_snapshot(cairo_t * cr, int * i, int width, int height)
 {
-  //static int i = 0;
-  
   cairo_set_source_rgb(cr, 1, 0, 1);
   cairo_set_line_width(cr, 1);
   context_draw_circle(cr, width, height, *i);
