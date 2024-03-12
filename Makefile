@@ -243,7 +243,8 @@ $(_build_dir)/demo/image.png: $(_build_dir)/bin/cairo-png
 _demo_static += $(_build_dir)/demo/image.png
 
 
-# animation
+# cairo-svg-animation -> unable to produce gif without temporary pgn files
+
 # $(_build_dir)/demo/animation.gif: \
 # 	     $(_build_dir)/log/cairo-png-animation.log
 # 	   ffmpeg -i build/demo/animation_%3d.png $@
@@ -285,7 +286,8 @@ $(_build_dir)/demo/image.svg: $(_build_dir)/bin/cairo-svg
 
 _demo_static += $(_build_dir)/demo/image.svg
 
-# animation
+# cairo-svg-animation -> unable to produce a single file animation
+
 # $(_build_dir)/demo/animation.svg.mkv: \
 # 	     $(_build_dir)/log/cairo-svg-animation.log
 # 	   ffmpeg -f image2 -i $(_build_dir)/demo/animation_%3d.svg -vcodec copy $@
@@ -318,28 +320,28 @@ _object += $(_build_dir)/object/cairo-svg-animation.o
 
 ################################### BUILDING ###################################
 .PHONY: link
-link: $(_bin)
+link: compile $(_bin)
 
 .PHONY: compile
 compile: $(_object)
 
 .PHONY: demo-static
-demo-static: $(_demo_static)
+demo-static: link $(_demo_static)
 
 .PHONY: log
-log : $(_log)
+log : link $(_log)
 
 .PHONY: demo
-demo: demo-static log
+demo: link demo-static log
 
 ################################### CLEANING ###################################
 .PHONY: clean
 clean:
-	-$(RM) $(_object)
+	-$(RM) $(_object) $(_log)
 
 .PHONY: distclean
 distclean: clean
-	-$(RM) $(_bin) $(_demo_static) $(_log) $(_build_dir)/demo/animation*
+	-$(RM) $(_bin) $(_demo_static)
 
 .PHONY: uninitialize
 uninitialize: distclean
