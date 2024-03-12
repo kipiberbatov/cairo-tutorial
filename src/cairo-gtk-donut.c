@@ -28,36 +28,36 @@ static void donut_draw(cairo_t * cr)
   }
 }
 
-static void do_drawing(cairo_t *cr, GtkWidget *widget)
+static void do_drawing(GtkWidget * widget, cairo_t * cr)
 {
   int height, width;
-  GtkWidget * win;
+  GtkWidget * window;
 
-  win = gtk_widget_get_toplevel(widget);
-  gtk_window_get_size(GTK_WINDOW(win), &width, &height);
+  window = gtk_widget_get_toplevel(widget);
+  gtk_window_get_size(GTK_WINDOW(window), &width, &height);
   donut_boundary(cr, width, height);
   donut_draw(cr);
 }
 
 static int on_draw_event(GtkWidget * widget, cairo_t * cr, void * user_data)
 {
-  do_drawing(cr, widget);
+  do_drawing(widget, cr);
   return FALSE;
 }
 
 int main(int argc, char * argv[])
 {
-  GtkWidget *window;
-  GtkWidget *darea;
+  GtkWidget * window;
+  GtkWidget * drawing_area;
 
   gtk_init(&argc, &argv);
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  drawing_area = gtk_drawing_area_new();
+  gtk_container_add(GTK_CONTAINER (window), drawing_area);
 
-  darea = gtk_drawing_area_new();
-  gtk_container_add(GTK_CONTAINER (window), darea);
-
-  g_signal_connect(G_OBJECT(darea), "draw", G_CALLBACK(on_draw_event), NULL);
+  g_signal_connect(G_OBJECT(drawing_area), "draw",
+                   G_CALLBACK(on_draw_event), NULL);
   g_signal_connect(G_OBJECT(window), "destroy",
                    G_CALLBACK(gtk_main_quit), NULL);
 

@@ -25,6 +25,13 @@ initialize:
 	mkdir -p $(_build_dir)/demo
 	mkdir -p $(_build_dir)/log
 
+################################### CONTEXT ####################################
+$(_build_dir)/object/context_draw_circle.o: src/context_draw_circle.c \
+	  include/context_draw_circle.h
+	$(CC) -o $@ $(_cairo_cflags) -iquote include -O2 -c $<
+
+_object += $(_build_dir)/object/context_draw_circle.o
+
 ##################################### GTK ######################################
 # cairo-gtk
 $(_build_dir)/log/cairo-gtk.log: $(_build_dir)/bin/cairo-gtk
@@ -136,13 +143,16 @@ $(_build_dir)/log/cairo-gtk-moving-point.log: $(_build_dir)/bin/cairo-gtk-moving
 
 _log += $(_build_dir)/log/cairo-gtk-moving-point.log
 
-$(_build_dir)/bin/cairo-gtk-moving-point: $(_build_dir)/object/cairo-gtk-moving-point.o
-	$(CC) -o $@ $(_gtk_libs) $<
+$(_build_dir)/bin/cairo-gtk-moving-point: \
+	  $(_build_dir)/object/cairo-gtk-moving-point.o \
+	  $(_build_dir)/object/context_draw_circle.o
+	$(CC) -o $@ $(_gtk_libs) $^
 
 _bin += $(_build_dir)/bin/cairo-gtk-moving-point
 
-$(_build_dir)/object/cairo-gtk-moving-point.o: src/cairo-gtk-moving-point.c
-	$(CC) -o $@ $(_gtk_cflags) -O2 -c $<
+$(_build_dir)/object/cairo-gtk-moving-point.o: src/cairo-gtk-moving-point.c \
+	  include/context_draw_circle.h
+	$(CC) -o $@ $(_gtk_cflags) -iquote include -O2 -c $<
 
 _object += $(_build_dir)/object/cairo-gtk-moving-point.o
 
@@ -203,13 +213,16 @@ $(_build_dir)/demo/animation.pdf: $(_build_dir)/bin/cairo-pdf-animation
 
 _demo_static += $(_build_dir)/demo/animation.pdf
 
-$(_build_dir)/bin/cairo-pdf-animation: $(_build_dir)/object/cairo-pdf-animation.o
-	$(CC) -o $@ $(_cairo_libs) $<
+$(_build_dir)/bin/cairo-pdf-animation: \
+	   $(_build_dir)/object/cairo-pdf-animation.o \
+	   $(_build_dir)/object/context_draw_circle.o
+	$(CC) -o $@ $(_cairo_libs) $^
 
 _bin += $(_build_dir)/bin/cairo-pdf-animation
 
-$(_build_dir)/object/cairo-pdf-animation.o: src/cairo-pdf-animation.c
-	$(CC) -o $@ $(_cairo_cflags) -O2 -c $<
+$(_build_dir)/object/cairo-pdf-animation.o: src/cairo-pdf-animation.c \
+	  include/context_draw_circle.h
+	$(CC) -o $@ $(_cairo_cflags) -iquote include -O2 -c $<
 
 _object += $(_build_dir)/object/cairo-pdf-animation.o
 

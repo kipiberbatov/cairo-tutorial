@@ -3,43 +3,46 @@
 #include <cairo.h>
 #include <gtk/gtk.h>
 
-struct {
+typedef struct
+{
   int count;
   double coordx[100];
   double coordy[100];
-} glob;
+} points;
 
-static void do_drawing(cairo_t * cr)
+static void do_drawing(cairo_t * cr, points * p)
 {
   int i, j;
   
   cairo_set_source_rgb(cr, 0, 0, 0);
   cairo_set_line_width(cr, 0.5);
-  for (i = 0; i < glob.count; i++)
+  for (i = 0; i < p->count; i++)
   {
-    for (j = i + 1; j < glob.count; j++)
+    for (j = i + 1; j < p->count; j++)
     {
-      cairo_move_to(cr, glob.coordx[i], glob.coordy[i]);
-      cairo_line_to(cr, glob.coordx[j], glob.coordy[j]);
+      cairo_move_to(cr, p->coordx[i], p->coordy[i]);
+      cairo_line_to(cr, p->coordx[j], p->coordy[j]);
     }
   }
-  glob.count = 0;
+  p->count = 0;
   cairo_stroke(cr);    
 }
 
 static int on_draw_event(GtkWidget * widget, cairo_t * cr, void * user_data)
 {
-  do_drawing(cr);
+  do_drawing(cr, (points *) user_data);
   return FALSE;
 }
 
 static int clicked(GtkWidget * widget, GdkEventButton * event, void * user_data)
 {
+  points * p = (points *) user_data;
+  
   if (event->button == 1)
   {
-    glob.coordx[glob.count] = event->x;
-    glob.coordy[glob.count] = event->y;
-    glob.count++;
+    p->coordx[p->count] = event->x;
+    p->coordy[p->count] = event->y;
+    p->count++;
   }
 
   if (event->button == 3)
@@ -52,23 +55,25 @@ static int clicked(GtkWidget * widget, GdkEventButton * event, void * user_data)
 int main(int argc, char * argv[])
 {
   GtkWidget * window;
-  GtkWidget * darea;
+  GtkWidget * drawing_area;
   
-  glob.count = 0;
+  points p;
+  p.count = 0;
 
   gtk_init(&argc, &argv);
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-  darea = gtk_drawing_area_new();
-  gtk_container_add(GTK_CONTAINER(window), darea);
+  drawing_area = gtk_drawing_area_new();
+  gtk_container_add(GTK_CONTAINER(window), drawing_area);
  
   gtk_widget_add_events(window, GDK_BUTTON_PRESS_MASK);
 
-  g_signal_connect(G_OBJECT(darea), "draw", G_CALLBACK(on_draw_event), NULL); 
+  g_signal_connect(G_OBJECT(drawing_area), "draw",
+                   G_CALLBACK(on_draw_event), &p); 
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);  
     
-  g_signal_connect(window, "button-press-event", G_CALLBACK(clicked), NULL);
+  g_signal_connect(window, "button-press-event", G_CALLBACK(clicked), &p);
  
   gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
   gtk_window_set_default_size(GTK_WINDOW(window), 400, 300); 
