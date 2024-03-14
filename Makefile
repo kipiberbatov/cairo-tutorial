@@ -228,22 +228,6 @@ $(_build_dir)/object/cairo-pdf.o: src/cairo-pdf.c
 
 _object += $(_build_dir)/object/cairo-pdf.o
 
-# animation
-# $(_build_dir)/demo/animation.pdf.mkv: \
-# 	     $(_build_dir)/log/cairo-pdf-animation.log
-# 	   ffmpeg -f image2 -i $(_build_dir)/demo/animation_%3d.pdf -vcodec copy $@
-
-# _demo_static += $(_build_dir)/demo/animation.pdf.mkv
-
-# $(_build_dir)/log/cairo-pdf-animation.log: $(_build_dir)/bin/cairo-pdf-animation
-# 	$< ../demo/animation
-# 	printf "This file was created after running %s\n" \
-# 	  $(word 2, $^) > $@
-# 	printf "Creation time: " >> $@
-# 	echo $(shell date -u) >> $@
-#
-# _log += $(_build_dir)/log/cairo-pdf-animation.log
-
 $(_build_dir)/demo/animation.pdf: $(_build_dir)/bin/cairo-pdf-animation
 	$< $@
 
@@ -301,20 +285,25 @@ _demo_static += $(_build_dir)/demo/image.png
 
 # cairo-svg-animation -> unable to produce gif without temporary pgn files
 
-# $(_build_dir)/demo/animation.gif: \
-# 	     $(_build_dir)/log/cairo-png-animation.log
-# 	   ffmpeg -i build/demo/animation_%3d.png $@
-#
-# _demo_static += $(_build_dir)/demo/animation.gif
-#
-# $(_build_dir)/log/cairo-png-animation.log: $(_build_dir)/bin/cairo-png-animation
-# 	$< $(_build_dir)/demo/animation
-# 	printf "This file was created after running %s\n" \
-# 	  ../bin/cairo-png-animation > $@
-# 	printf "Creation time: " >> $@
-# 	echo $(shell date -u) >> $@
-#
-# _log += $(_build_dir)/log/cairo-png-animation.log
+$(_build_dir)/demo/animation.png: $(_build_dir)/log/cairo-png-animation.log
+	   apngasm build/demo/animation_*.png -o $@
+
+_demo_static += $(_build_dir)/demo/animation.png
+
+$(_build_dir)/demo/animation.gif: \
+	     $(_build_dir)/log/cairo-png-animation.log
+	   ffmpeg -i build/demo/animation_%3d.png $@
+
+_demo_static += $(_build_dir)/demo/animation.gif
+
+$(_build_dir)/log/cairo-png-animation.log: $(_build_dir)/bin/cairo-png-animation
+	$< $(_build_dir)/demo/animation
+	printf "This file was created after running %s\n" \
+	  ../bin/cairo-png-animation > $@
+	printf "Creation time: " >> $@
+	echo $(shell date -u) >> $@
+
+_log += $(_build_dir)/log/cairo-png-animation.log
 
 $(_build_dir)/bin/cairo-png-animation: $(_build_dir)/object/cairo-png-animation.o
 	$(CC) -o $@ $(_cairo_libs) $<
@@ -397,7 +386,7 @@ clean:
 
 .PHONY: distclean
 distclean: clean
-	-$(RM) $(_bin) $(_demo_static)
+	-$(RM) $(_bin) $(_demo_static) $(_build_dir)/demo/animation_*.png
 
 .PHONY: uninitialize
 uninitialize: distclean

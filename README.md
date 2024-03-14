@@ -16,6 +16,11 @@ This project depend on the following C libraries
 It is also assumed that the pkg-config utility is installed:
 [https://www.freedesktop.org/wiki/Software/pkg-config/](https://www.freedesktop.org/wiki/Software/pkg-config/)
 
+Some of the demos depend on the following programs being installed:
+
+- ffmpeg [https://ffmpeg.org/](https://ffmpeg.org/) for handling media files (specifically, used for creating gif animations)
+- apngasm [https://apngasm.sourceforge.net/](https://apngasm.sourceforge.net/) for creating png animations
+
 ## Building on Unix-like platforms
 
 Navigate to your preferred location on the command line. Type the following:
